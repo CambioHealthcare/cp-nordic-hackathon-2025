@@ -1,0 +1,18 @@
+.nav {
+    padding: 1rem;
+    background-color: #f0f0f0;
+}
+
+.navList {
+    list-style: none;
+    display: flex;
+    gap: 1rem;
+    margin: 0;
+    padding: 0;
+}
+
+.main {
+    padding: 1rem;
+    max-width: 1200px;
+    margin: 0 auto;
+}

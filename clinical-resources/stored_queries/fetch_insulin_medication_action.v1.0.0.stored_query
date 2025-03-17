@@ -1,0 +1,12 @@
+SELECT
+    a/description[at0017]/items[at0020]/value AS medication,
+    medication/value AS medication_name,
+    d/items[at0144]/value/magnitude AS dose,
+    a/time/value as date_time
+FROM EHR e
+    CONTAINS ACTION a[openEHR-EHR-ACTION.medication.v1]
+    CONTAINS CLUSTER d[openEHR-EHR-CLUSTER.dosage.v2]
+WHERE
+    medication/defining_code/terminology_id/value = 'ATC' AND
+    medication/defining_code/code_string = 'A10AB04' AND
+ORDER BY date DESC

@@ -1,0 +1,11 @@
+SELECT
+    AVG(b/items[at0001]/value/magnitude) AS analyte_avg,
+    MAX(b/items[at0001]/value/magnitude) AS analyte_max,
+    MIN(b/items[at0001]/value/magnitude) AS analyte_min
+FROM EHR e
+    CONTAINS OBSERVATION a[openEHR-EHR-OBSERVATION.laboratory_test_result.v1]
+        CONTAINS CLUSTER b[openEHR-EHR-CLUSTER.laboratory_test_analyte.v1]
+WHERE
+    b/items[at0024]/value/defining_code/code_string = '365812005' AND
+    d/items[at0024]/value/defining_code/terminology_id/value LIKE 'http://snomed.info/sct/*' AND
+    a/data[at0001]/events[at0002]/time/value > current-date-time() - 'PT24H'

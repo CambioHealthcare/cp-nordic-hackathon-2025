@@ -1,0 +1,8 @@
+= Open bruno collection
+
+* Click on the "Three dots" button on the top right corner of the screen
+* Click on "Open Collection"
+* Select the bruno/ folder inside ./clinical-resources
+* Open the "Get created Composition" in the util folder
+* Select "Developer Mode"
+

@@ -1,0 +1,57 @@
+SELECT
+    a/data[at0001]/items[at0002.1]/value/value AS name,
+    a/data[at0001]/items[at0002.1]/value/defining_code/code_string AS code,
+    a/data[at0001]/items[at0002.1]/value/defining_code/terminology_id/value AS terminology_id,
+    a/data[at0001]/items[at0077]/value/value AS date_time_of_onset
+FROM EHR e CONTAINS EVALUATION a[openEHR-EHR-EVALUATION.problem_diagnosis.v1]
+ORDER BY date_time_of_onset DESC
+
+SELECT
+    d/items[at0024]/value/value as lab_analyte_name,
+    d/items[at0001]/value/magnitude as glucose_level,
+    a/data[at0001]/events[at0002]/time/value as lab_event_time
+FROM EHR e
+    CONTAINS COMPOSITION c
+        CONTAINS OBSERVATION a[openEHR-EHR-OBSERVATION.laboratory_test_result.v1]
+            CONTAINS CLUSTER d[openEHR-EHR-CLUSTER.laboratory_test_analyte.v1]
+WHERE
+    lab_event_time > (
+        SELECT min(p/data[at0001]/items[at0077]/value/value)
+        FROM EHR e
+        CONTAINS EVALUATION p[openEHR-EHR-EVALUATION.problem_diagnosis.v1]
+        WHERE
+            p/data[at0001]/items[at0002.1]/value/defining_code/terminology_id/value = 'ICD10' AND
+            (
+                p/data[at0001]/items[at0002.1]/value/defining_code/code_string LIKE 'E10*' OR
+                p/data[at0001]/items[at0002.1]/value/defining_code/code_string LIKE 'E11*' OR
+                p/data[at0001]/items[at0002.1]/value/defining_code/code_string LIKE 'E12*' OR
+                p/data[at0001]/items[at0002.1]/value/defining_code/code_string LIKE 'E13*' OR
+                p/data[at0001]/items[at0002.1]/value/defining_code/code_string LIKE 'E14*'
+            )
+    ) AND
+    d/items[at0024]/value/defining_code/code_string = '365812005' AND
+    d/items[at0024]/value/defining_code/terminology_id/value LIKE 'http://snomed.info/sct/*' AND
+    d/items[at0001]/value/magnitude > 16.7 AND
+    lab_event_time > current-date-time() - 'PT1H' AND
+    NOT c/uid/value IN
+    (
+        SELECT c1/uid/value
+        FROM EHR e
+        CONTAINS (
+            COMPOSITION c1
+                CONTAINS OBSERVATION a1[openEHR-EHR-OBSERVATION.laboratory_test_result.v1]
+                    CONTAINS CLUSTER d1[openEHR-EHR-CLUSTER.laboratory_test_analyte.v1]
+        ) AND
+            ACTION m[openEHR-EHR-ACTION.medication.v1]
+                CONTAINS CLUSTER md[openEHR-EHR-CLUSTER.dosage.v2]
+        WHERE
+            d1/items[at0024]/value/defining_code/code_string = '365812005' AND
+            d1/items[at0024]/value/defining_code/terminology_id/value LIKE 'http://snomed.info/sct/*' AND
+            m/description[at0017]/items[at0020]/value/defining_code/terminology_id/value = 'ATC' AND
+            m/description[at0017]/items[at0020]/value/defining_code/code_string = 'A10AB04' AND
+            d1/items[at0001]/value/magnitude > 16.7 AND
+            a1/data[at0001]/events[at0002]/time/value > current-date-time() - 'PT1H' AND
+            m/time/value > current-date-time() - 'PT1H' AND
+            a1/data[at0001]/events[at0002]/time/value > m/time/value - 'PT1H' AND
+            a1/data[at0001]/events[at0002]/time/value < m/time/value + 'PT1H'
+    )

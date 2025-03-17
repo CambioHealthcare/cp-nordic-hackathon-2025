@@ -1,0 +1,66 @@
+.container {
+    padding: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.fetchButton {
+    padding: 10px 20px;
+    margin: 20px 0;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.fetchButton:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+}
+
+.fetchButton:hover:not(:disabled) {
+    background-color: #45a049;
+}
+
+.dataContainer {
+    background-color: #2b2b2b;
+    color: #ffffff;
+    padding: 20px;
+    border-radius: 4px;
+    overflow-x: auto;
+    border: 1px solid #444;
+    margin-top: 20px;
+    font-family: 'Consolas', 'Monaco', monospace;
+    line-height: 1.5;
+    text-align: left;
+    font-size: 11px;
+}
+
+.jsonKey {
+    color: #9cdcfe;
+}
+
+.jsonString {
+    color: #ce9178;
+}
+
+.jsonNumber {
+    color: #b5cea8;
+}
+
+.jsonBoolean {
+    color: #569cd6;
+}
+
+.jsonNull {
+    color: #569cd6;
+}
+
+.error {
+    color: #ff0000;
+    padding: 10px;
+    margin: 10px 0;
+    background-color: #ffebee;
+    border-radius: 4px;
+}

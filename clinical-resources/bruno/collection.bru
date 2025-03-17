@@ -1,0 +1,72 @@
+script:pre-request {
+  const axios = require('axios');
+  const https = require('https');
+  const expect = require('chai').expect;
+  
+  const agent = new https.Agent({  
+    rejectUnauthorized: false
+  });
+  bru.setVar("PERSONA_1_CLIENT_ID", "persona.nhcp-t0X.pr0001.cu0001");
+  bru.setVar("PERSONA_1_CLIENT_SECRET", "persona.nhcp-t01.pr0001.cu000X");
+  bru.setVar("PERSONA_2_CLIENT_ID", "persona.rajesh.kapoor.doctor.kry");
+  bru.setVar("PERSONA_2_CLIENT_SECRET", "persona.rajesh.kapoor.doctor.kry");
+  bru.setVar("TOKEN_URL", "https://idp.sandbox.platform.cambio.se/auth/realms/cambio-platform/protocol/openid-connect/token");
+  
+  ctx = {}
+  tokenUrl = getVar("TOKEN_URL");
+  
+  if(shouldPerformAuth()) {
+      persona1ClientId = getVar("PERSONA_1_CLIENT_ID");
+      persona1ClientSecret = getVar("PERSONA_1_CLIENT_SECRET");
+      getTokenRequest(ctx, persona1ClientId, persona1ClientSecret, 'JWT_TOKEN_PERSONA_1');
+      persona2ClientId = getVar("PERSONA_2_CLIENT_ID");
+      persona2ClientSecret = getVar("PERSONA_2_CLIENT_SECRET");
+      getTokenRequest(ctx, persona2ClientId, persona2ClientSecret, 'JWT_TOKEN_PERSONA_2');
+      if (ctx.error === undefined) {
+        bru.setEnvVar("LAST_AUTH_TIME", new Date().getTime());
+      }
+    console.log("Waiting one second for variables to sync...");
+    await (new Promise(resolve => setTimeout(resolve, 1000)));
+    console.log("done.");
+  }
+  
+  function getTokenRequest(ctx, clientId, clientSecret, token_variable_name){
+      console.log("sending token request for " + clientId)
+      axios.request({
+        url: tokenUrl,
+        method: "post",
+        auth: {
+          username: clientId,
+          password: clientSecret
+        },
+        data: {
+          "grant_type": "client_credentials"
+        },
+        httpsAgent: agent,
+        headers: {
+              'Accept': 'application/json',
+              'Content-Type': 'application/x-www-form-urlencoded',       
+        }
+      }).then(response => {
+          bru.setVar(token_variable_name, response.data.access_token);
+      }).catch(error => {
+          ctx.error = error.response ? error.response.data : error.message
+          console.error('Error fetching token for ' + clientId + ':', ctx.error);
+      });
+  }
+  
+  function getVar(varName) {
+    if (bru.getEnvVar(varName)) {
+      return bru.getEnvVar(varName)
+    } else {
+      return bru.getVar(varName);    
+    }
+  }
+  
+  function shouldPerformAuth() {
+      lastAuthTime = bru.getEnvVar("LAST_AUTH_TIME")
+      if (getVar("TOKEN_URL") == undefined) return false
+      if (lastAuthTime == undefined) return true
+      return (new Date().getTime() - lastAuthTime > 60000) // 1 minute since last auth
+  }
+}

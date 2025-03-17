@@ -1,0 +1,8 @@
+# Cambio Platform Nordic Hackathon 2025 Repository
+
+Resources for using the Cambio Platform during the Nordic Hackathon 2025.
+
+* *sample-apps*: Contains the source code for the sample apps that access the Cambio Platform.
+* *clinical-resources/templates*: Contains openEHR templates in OPT format used in the Cambio Platform.
+* *clinical-resources/stored_queries*: Contains stored queries (AQL) used in sample application in the Cambio Platform.
+* *clinical-resources/bruno*: Contains sample openEHR Bruno API calls for the Cambio Platform.

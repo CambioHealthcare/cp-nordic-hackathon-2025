@@ -1,0 +1,24 @@
+= Cambio Platform Sample Web Apps
+
+== Overview
+ 
+ This app demonstrates how to interact with the Cambio Platform to embed forms and charts glucose levels, insulin doses, and diagnoses for a patient.
+
+== Install dependencies
+
+To install the dependencies, run the following command:
+[source,shell]
+----
+npm install
+----
+
+== Start app server
+
+To start the app server, run the following command:
+[source,shell]
+----
+npm start
+----
+
+The app server will start on port 3000. To access the app, open a web browser and navigate to `http://localhost:3000`
+An EHR id can be passed as a query parameter to the app server. For example, to start the app with an EHR id of `fd60d365-8d87-47e0-8d87-67590d8d58c4`, use the following URL: http://localhost:3000/?ehr_id=fd60d365-8d87-47e0-8d87-67590d8d58c4.

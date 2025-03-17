@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <base href="/" />
+    <title>Simple app example</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-icons/1.8.1/font/bootstrap-icons.min.css" rel="stylesheet">
+</head>
+<body>
+    <div id="error-message" style="display: none;"></div>
+    <div class="container mt-4">
+        <div class="container mt-4" id="ehr_id-container">
+        <div class="alert alert-info" role="alert">
+            <strong>EHR ID</strong> 
+            <div class="input-group mt-2">
+                <input type="text" id="ehr_id-input" class="form-control" placeholder="Enter new EHR ID">
+                <button class="btn btn-primary" type="button" onclick="updateEhrId()">
+                    <i class="bi bi-arrow-repeat"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+        <ul class="nav nav-tabs" id="appTabs" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="glucose-tab" data-bs-toggle="tab" data-bs-target="#glucose-tab-pane" type="button" role="tab" aria-controls="glucose-tab-pane" aria-selected="true">
+                   Blood glucose levels
+                </button>
+            </li>           
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="medication-tab" data-bs-toggle="tab" data-bs-target="#medication-tab-pane" type="button" role="tab" aria-controls="medication-tab-pane" aria-selected="false">
+                    Insulin intake
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="diagnosis-tab" data-bs-toggle="tab" data-bs-target="#diagnosis-tab-pane" type="button" role="tab" aria-controls="diagnosis-tab-pane" aria-selected="false">
+                    Diagnosis
+                </button>
+            </li>            
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="alert-tab" data-bs-toggle="tab" data-bs-target="#alert-tab-pane" type="button" role="tab" aria-controls="alert-tab-pane" aria-selected="false">
+                    Hyperglycemia alerts
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="patient-view-tab" data-bs-toggle="tab" data-bs-target="#patient-tab-pane" type="button" role="tab" aria-controls="patient-tab-pane" aria-selected="true">
+                    Patient view
+                </button>
+            </li>
+        </ul>
+    
+        <div class="tab-content mt-3" id="appTabContent">
+            <div class="tab-pane fade show active" id="glucose-tab-pane" role="tabpanel" aria-labelledby="glucose-tab">
+                <iframe id="labForm" class="iframe-form-container"></iframe>
+                <iframe id="glucoseTable" class="iframe-chart-container"></iframe>
+            </div>
+             <div class="tab-pane fade" id="medication-tab-pane" role="tabpanel" aria-labelledby="medication-tab">
+                <iframe id="medicationForm" class="iframe-form-container"></iframe>
+                <iframe id="medicationTable" class="iframe-chart-container"></iframe>
+            </div>
+             <div class="tab-pane fade" id="diagnosis-tab-pane" role="tabpanel" aria-labelledby="diagnosis-tab">
+                <iframe id="diagnosisForm" class="iframe-form-container"></iframe>
+                <iframe id="problemDiagnosisTable" class="iframe-chart-container"></iframe>
+            </div>
+            <div class="tab-pane fade" id="alert-tab-pane" role="tabpanel" aria-labelledby="alert-tab">
+                <iframe id="alertChart" class="iframe-chart-container"></iframe>
+            </div>
+            <div class="tab-pane fade" id="patient-tab-pane" role="tabpanel" aria-labelledby="alert-tab">
+                <iframe id="glucoseAndInsulinChart" class="iframe-chart-container"></iframe>
+                <iframe id="glucoseStatsChart" class="iframe-chart-slim-container"></iframe>
+                <iframe id="labForm2" class="iframe-form-container"></iframe>
+                <iframe id="medicationForm2" class="iframe-form-container"></iframe>
+            </div>
+         </div>
+    </div>
+</body>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    const formsBaseUrl = 'https://forms-dev.sandbox.platform.cambio.se';
+    const grafanaBaseUrl = 'https://grafana.sandbox.platform.cambio.se';
+    const cdrBaseUrl = 'https://cdr-dev.sandbox.platform.cambio.se/openehr'
+</script>
+<script src="cp_sample_lib.js"></script>
+<script>
+    addGrafanaChart('glucoseTable', orgId = 1, chartId = 'db64dc6a-cd92-4126-ab66-539668dc75d5');
+    addGrafanaChart('glucoseAndInsulinChart', orgId = 1, chartId = 'e62713b7-253c-4ff8-90d3-1644d1517e39');
+    addGrafanaChart('medicationTable', orgId = 1, chartId = 'f0a52291-7518-4679-98b3-ddfd8d88807b');
+    addGrafanaChart('problemDiagnosisTable', orgId = 1, chartId = 'a8e60d87-ee23-4ca1-97ee-254a88a7e73a');
+    addGrafanaChart('alertChart', orgId = 1, chartId = 'bbef2682-6f8e-4035-934e-34d0bff9899c');
+
+    addForm('labForm', 'simple_glucose_lab_result', '0.1.6');
+    addForm('labForm2', 'simple_glucose_lab_result', '0.1.6');
+    addForm('medicationForm', 'simple_insulin_medication_action', '0.1.3');
+    addForm('medicationForm2', 'simple_insulin_medication_action', '0.1.3');
+    addForm('diagnosisForm', 'simple_problem_diagnosis', '0.1.0');
+</script>
+</html>

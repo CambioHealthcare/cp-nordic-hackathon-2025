@@ -1,0 +1,199 @@
+meta {
+  name: Create composition 03
+  type: http
+  seq: 3
+}
+
+post {
+  url: {{EHR_BASE_URL}}/v1/ehr/{{EHR_ID}}/composition
+  body: json
+  auth: none
+}
+
+headers {
+  Authorization: Bearer {{JWT_TOKEN_PERSONA_1}}
+}
+
+body:json {
+  {
+    "_type": "COMPOSITION",
+    "name": {
+      "_type": "DV_TEXT",
+      "value": "simple_insulin_medication_action.v0.0.1"
+    },
+    "archetype_node_id": "openEHR-EHR-COMPOSITION.encounter.v2",
+    "archetype_details": {
+      "archetype_id": {
+        "value": "openEHR-EHR-COMPOSITION.encounter.v2"
+      },
+      "template_id": {
+        "value": "simple_insulin_medication_action.v0.0.1"
+      },
+      "rm_version": "1.0.4"
+    },
+    "language": {
+      "terminology_id": {
+        "value": "ISO_639-1"
+      },
+      "code_string": "en"
+    },
+    "territory": {
+      "terminology_id": {
+        "value": "ISO_3166-1"
+      },
+      "code_string": "SE"
+    },
+    "category": {
+      "value": "event",
+      "defining_code": {
+        "terminology_id": {
+          "value": "openehr"
+        },
+        "code_string": "433"
+      }
+    },
+    "composer": {
+      "_type": "PARTY_IDENTIFIED",
+      "name": "composer name"
+    },
+    "context": {
+      "start_time": {
+        "_type": "DV_DATE_TIME",
+        "value": "2025-03-14T03:52:44.949Z"
+      },
+      "setting": {
+        "value": "other care",
+        "defining_code": {
+          "terminology_id": {
+            "value": "openehr"
+          },
+          "code_string": "238"
+        }
+      }
+    },
+    "content": [
+      {
+        "_type": "ACTION",
+        "name": {
+          "_type": "DV_TEXT",
+          "value": "Medication management"
+        },
+        "archetype_node_id": "openEHR-EHR-ACTION.medication.v1",
+        "archetype_details": {
+          "archetype_id": {
+            "value": "openEHR-EHR-ACTION.medication.v1"
+          },
+          "rm_version": "1.0.4"
+        },
+        "language": {
+          "terminology_id": {
+            "value": "ISO_639-1"
+          },
+          "code_string": "en"
+        },
+        "encoding": {
+          "terminology_id": {
+            "value": "IANA_character-sets"
+          },
+          "code_string": "UTF-8"
+        },
+        "subject": {
+          "_type": "PARTY_SELF"
+        },
+        "time": {
+          "_type": "DV_DATE_TIME",
+          "value": "2025-03-14T03:52:44.949Z"
+        },
+        "description": {
+          "_type": "ITEM_TREE",
+          "name": {
+            "_type": "DV_TEXT",
+            "value": "Tree"
+          },
+          "archetype_node_id": "at0017",
+          "items": [
+            {
+              "_type": "ELEMENT",
+              "name": {
+                "_type": "DV_TEXT",
+                "value": "Medication item"
+              },
+              "archetype_node_id": "at0020",
+              "value": {
+                "_type": "DV_CODED_TEXT",
+                "value": "Humalog (Insulin lispro)",
+                "defining_code": {
+                  "terminology_id": {
+                    "value": "ATC"
+                  },
+                  "code_string": "A10AB04"
+                }
+              }
+            },
+            {
+              "_type": "CLUSTER",
+              "name": {
+                "_type": "DV_TEXT",
+                "value": "Medication management"
+              },
+              "archetype_node_id": "openEHR-EHR-CLUSTER.dosage.v2",
+              "archetype_details": {
+                "archetype_id": {
+                  "value": "openEHR-EHR-CLUSTER.dosage.v2"
+                },
+                "rm_version": "1.0.4"
+              },
+              "items": [
+                {
+                  "_type": "ELEMENT",
+                  "name": {
+                    "_type": "DV_TEXT",
+                    "value": "Dose (Units)"
+                  },
+                  "archetype_node_id": "at0144",
+                  "value": {
+                    "_type": "DV_QUANTITY",
+                    "units": "[iU]",
+                    "magnitude": 2
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "ism_transition": {
+          "current_state": {
+            "value": "active",
+            "defining_code": {
+              "terminology_id": {
+                "value": "openehr"
+              },
+              "code_string": "245"
+            }
+          },
+          "careflow_step": {
+            "value": "Dose administered",
+            "defining_code": {
+              "terminology_id": {
+                "value": "local"
+              },
+              "code_string": "at0006"
+            }
+          }
+        }
+      }
+    ]
+  }
+}
+
+tests {
+  test("Status code is 201", function () {
+      expect(res.getStatus(), res.getBody()?.toString()).eq(201);
+  });
+  
+  test("Expecting a valid, newly created Composition", function() {
+      const composition  = res.getBody();
+      const composition_uid = composition.uid.value.substr(0, composition.uid.value.indexOf('::'));
+      bru.setVar("COMPOSITION_ID", composition_uid);
+  });
+}

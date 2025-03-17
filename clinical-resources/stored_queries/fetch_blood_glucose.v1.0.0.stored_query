@@ -1,0 +1,12 @@
+SELECT
+    b/items[at0024]/value AS analyte,
+    b/items[at0024]/value/value AS analyte_name,
+    b/items[at0001]/value/magnitude AS analyte_result_magnitude,
+    a/data[at0001]/events[at0002]/time/value AS event_time
+FROM EHR e
+    CONTAINS OBSERVATION a[openEHR-EHR-OBSERVATION.laboratory_test_result.v1]
+    CONTAINS CLUSTER b[openEHR-EHR-CLUSTER.laboratory_test_analyte.v1]
+WHERE
+    analyte/defining_code/code_string = '365812005' AND
+    analyte/defining_code/terminology_id/value LIKE 'http://snomed.info/sct/*'
+ORDER BY event_time DESC

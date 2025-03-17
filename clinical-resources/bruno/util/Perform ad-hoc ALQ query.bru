@@ -1,0 +1,32 @@
+meta {
+  name: Perform ad-hoc ALQ query
+  type: http
+  seq: 1
+}
+
+post {
+  url: {{EHR_BASE_URL}}/v1/query/aql
+  body: json
+  auth: none
+}
+
+headers {
+  Strong-Consistency: True
+  Authorization: Bearer {{JWT_TOKEN_PERSONA_1}}
+}
+
+body:json {
+  {
+      "q" : "SELECT\n  a/data[at0001]/items[at0002]/value/value AS name,\n  a/data[at0001]/items[at0002]/value/defining_code/code_string AS code,\n  a/data[at0001]/items[at0002]/value/defining_code/terminology_id/value AS terminology_id,\n  a/data[at0001]/items[at0077]/value/value AS date_time_of_onset\nFROM\n  EHR e CONTAINS EVALUATION a[openEHR-EHR-EVALUATION.problem_diagnosis.v1]\nORDER BY\n  date_time_of_onset DESC",
+      "query_parameters" : {
+          "ehr_id" : "{{EHR_ID}}",
+          "fetch": 10
+      }
+  }
+}
+
+tests {
+  test("Status code is 200", function () {
+      expect(res.getStatus(), res.getBody()?.toString()).eq(200);
+  });
+}

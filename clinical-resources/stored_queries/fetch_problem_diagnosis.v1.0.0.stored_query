@@ -1,0 +1,7 @@
+SELECT
+    a/data[at0001]/items[at0002]/value/value AS name,
+    a/data[at0001]/items[at0002]/value/defining_code/code_string AS code,
+    a/data[at0001]/items[at0002]/value/defining_code/terminology_id/value AS terminology_id,
+    a/data[at0001]/items[at0077]/value/value AS date_time_of_onset
+FROM EHR e CONTAINS EVALUATION a[openEHR-EHR-EVALUATION.problem_diagnosis.v1]
+ORDER BY date_time_of_onset DESC

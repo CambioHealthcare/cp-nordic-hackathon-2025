@@ -1,0 +1,15 @@
+meta {
+  name: Generate JWT token
+  type: http
+  seq: 3
+}
+
+get {
+  url: http://httpstat.us/200
+  body: text
+  auth: none
+}
+
+tests {
+  res.setBody("{ \"jwtToken\": \"" + bru.getVar("JWT_TOKEN_PERSONA_1") + "\"}")
+}

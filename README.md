@@ -58,8 +58,6 @@ RefApp/
 
 ## Development
 
-- Run tests: `npm test`
-- Build for production: `npm run build`
 - Start production server: `npm start`
 
 
@@ -69,4 +67,11 @@ TBD
 
 ## License
 
-TBD
+GNU AFFERO GENERAL PUBLIC LICENSE (AGPL-3.0)
+
+Non-Commercial Use Restriction:
+Notwithstanding the terms of the AGPL-3.0, the User may not use, sell, license, or otherwise exploit the software for direct or indirect commercial advantage. This includes, but is not limited to:
+Selling or licensing copies of the software or derivative works.
+Using the software as part of a paid service, whether directly or via third parties.
+Incorporating the software into proprietary systems intended for commercial distribution.
+Any violation of this restriction will result in an immediate termination of the granted rights under this license, and the User must cease all use of the software.

@@ -4085,7 +4085,7 @@
             </cardinality>
         </attributes>
         <archetype_id>
-            <value>openEHR-EHR-COMPOSITION.encounter.v2</value>
+            <value>openEHR-EHR-COMPOSITION.encounter.v1</value>
         </archetype_id>
         <template_id>
             <value>simple_insulin_medication_action.v0.0.1</value>
@@ -4123,7 +4123,7 @@
                 </default_value>
             </children>
             <differential_path>
-                [openEHR-EHR-COMPOSITION.encounter.v2]/content[openEHR-EHR-ACTION.medication.v1]/description[at0017]/items[at0020]</differential_path>
+                [openEHR-EHR-COMPOSITION.encounter.v1]/content[openEHR-EHR-ACTION.medication.v1]/description[at0017]/items[at0020]</differential_path>
         </attributes>
     </constraints>
 </template>
